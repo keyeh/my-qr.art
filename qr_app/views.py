@@ -72,6 +72,7 @@ def add_qr_redirect(qr, url):
     return qr_secret
 
 
+# This the main function where the web request goes to
 def create_qr_from_array(request):
     if request.method == 'POST':
         url = request.POST['qrurl']

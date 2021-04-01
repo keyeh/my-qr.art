@@ -513,7 +513,7 @@ class QRCodeBuilder:
         #Create the various types of masks of the template
         self.masks = self.make_masks(template)
 
-        self.best_mask = self.choose_best_mask()
+        self.best_mask = 1 ## MODIFIED = self.choose_best_mask()
         self.code = self.masks[self.best_mask]
 
     def add_detection_pattern(self, m):

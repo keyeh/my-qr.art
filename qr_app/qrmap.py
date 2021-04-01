@@ -57,7 +57,7 @@ class QrMap:
         return self.qr[x + y * self.size]
 
     def get_with_mask(self, x, y):
-        mask = (y % 2) == 0
+        mask = (y % 2) == 0 # mask[1] in pyqrcode
         bit = self.get(x, y)
         if mask:
             if bit == ModuleType.AVAILABLE:
@@ -268,7 +268,7 @@ def interleave_path(path, version, error):
 
     return interleaved_path
 
-
+# This reads the design as QR code data and outputs bit string that can be converted to text
 def get_raw_qr_data(design, error='L', mode='binary'):
     version = design.get_version()
     qrmap = get_qr_map(version, error=error, mode=mode)
@@ -290,6 +290,7 @@ def get_raw_qr_data(design, error='L', mode='binary'):
 
     return (data, version)
 
+# Web request goes here
 def create_qr_from_map(design, url, mode, error):
     (bits, version) = get_raw_qr_data(design, error, mode)
     string = (bitstring_to_bin(bits) if mode == 'binary'

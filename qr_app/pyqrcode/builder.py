@@ -30,7 +30,7 @@ builds the code. While the various output methods draw the code into a file.
 #Imports required for 2.x support
 from __future__ import absolute_import, division, print_function, with_statement, unicode_literals
 
-import qr_app.pyqrcode.tables as tables
+from . import tables
 import io
 import itertools
 import math

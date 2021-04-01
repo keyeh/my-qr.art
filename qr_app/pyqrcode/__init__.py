@@ -42,9 +42,8 @@ Examples:
 
 #Imports required for 2.7 support
 from __future__ import absolute_import, division, print_function, with_statement, unicode_literals
-
-import qr_app.pyqrcode.tables
-import qr_app.pyqrcode.builder as builder
+from . import tables
+from . import builder
 
 try:
     str = unicode  # Python 2

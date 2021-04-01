@@ -290,6 +290,13 @@ def get_raw_qr_data(design, error='L', mode='binary'):
 
     return (data, version)
 
+def create_qr_url_from_map(design, url, mode, error):
+    (bits, version) = get_raw_qr_data(design, error, mode)
+    string = (bitstring_to_bin(bits) if mode == 'binary'
+              else bitstring_to_alphanumeric(bits))
+    with_url = url + '/' + string[(len(url)+1):]
+    return with_url
+
 # Web request goes here
 def create_qr_from_map(design, url, mode, error):
     (bits, version) = get_raw_qr_data(design, error, mode)

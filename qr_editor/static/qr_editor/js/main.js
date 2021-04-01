@@ -61,7 +61,7 @@ class Canvas {
     this.redo_arr = [];
     this.frames = [];
     this.prevStep = null;
-    this.downListener =  e => {
+    this.downListener = e => {
       this.active = true;
       this.steps.push([0, 0, "down", 0]);
       var rect = this.canvas.getBoundingClientRect();
@@ -163,13 +163,13 @@ class Canvas {
 
   doStep(step) {
     let x = step[0], y = step[1],
-        tool = step[2], color = step[3];
+      tool = step[2], color = step[3];
     if (tool == Tool.clearCanvas) {
       this.doClear();
     } else if (tool == Tool.pen) {
       if (this.active && tool == Tool.pen && this.prevStep && this.prevStep[2] == Tool.pen) {
         let prevX = this.prevStep[0],
-            prevY = this.prevStep[1];
+          prevY = this.prevStep[1];
         let minX = Math.min(prevX, x);
         let minY = Math.min(prevY, y);
         let maxX = Math.max(prevX, x);
@@ -211,7 +211,7 @@ class Canvas {
     }
     return true;
   }
-  
+
   draw(x, y, color) {
     if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
       let changed = !this.colorEquals(this.data[x][y], color);
@@ -255,16 +255,16 @@ class Canvas {
   //
   fastFloodFill = function (startX, startY, startC, replC) {
     var newPos,
-	x,
-	y,
-	pixelPos,
-	reachLeft,
-	reachRight,
-	drawingBoundLeft = 0,
-	drawingBoundTop = 0,
-	drawingBoundRight = this.width,
-	drawingBoundBottom = this.height,
-	pixelStack = [[startX, startY]];
+      x,
+      y,
+      pixelPos,
+      reachLeft,
+      reachRight,
+      drawingBoundLeft = 0,
+      drawingBoundTop = 0,
+      drawingBoundRight = this.width,
+      drawingBoundBottom = this.height,
+      pixelStack = [[startX, startY]];
 
     if (startX < 0 || startX >= this.width || startY < 0 || startY >= this.height) {
       return;
@@ -284,7 +284,7 @@ class Canvas {
 
       // Go up as long as the color matches and are inside the canvas
       while (y >= drawingBoundTop && this.colorEquals(this.data[x][y], startC) && !this.reserved[x][y]) {
-	y -= 1;
+        y -= 1;
       }
       y += 1;
 
@@ -296,30 +296,30 @@ class Canvas {
 
         this.draw(x, y, replC);
 
-	if (x > drawingBoundLeft) {
-	  if (this.colorEquals(this.data[x-1][y], startC) && !this.reserved[x-1][y]) {
-	    if (!reachLeft) {
-	      // Add pixel to stack
-	      pixelStack.push([x - 1, y]);
-	      reachLeft = true;
-	    }
-	  } else if (reachLeft) {
-	    reachLeft = false;
-	  }
-	}
+        if (x > drawingBoundLeft) {
+          if (this.colorEquals(this.data[x - 1][y], startC) && !this.reserved[x - 1][y]) {
+            if (!reachLeft) {
+              // Add pixel to stack
+              pixelStack.push([x - 1, y]);
+              reachLeft = true;
+            }
+          } else if (reachLeft) {
+            reachLeft = false;
+          }
+        }
 
-	if (x < (drawingBoundRight-1)) {
-	  if (this.colorEquals(this.data[x+1][y], startC) && !this.reserved[x+1][y]) {
-	    if (!reachRight) {
-	      // Add pixel to stack
-	      pixelStack.push([x + 1, y]);
-	      reachRight = true;
-	    }
-	  } else if (reachRight) {
-	    reachRight = false;
-	  }
-	}
-	y += 1;
+        if (x < (drawingBoundRight - 1)) {
+          if (this.colorEquals(this.data[x + 1][y], startC) && !this.reserved[x + 1][y]) {
+            if (!reachRight) {
+              // Add pixel to stack
+              pixelStack.push([x + 1, y]);
+              reachRight = true;
+            }
+          } else if (reachRight) {
+            reachRight = false;
+          }
+        }
+        y += 1;
       }
     }
   }
@@ -385,7 +385,7 @@ class Canvas {
     }
   }
 
-  saveInLocal(){
+  saveInLocal() {
     /*let a = this.frames.map(frame=> [frame[0].src,frame[1]]);
       let f =  JSON.stringify(a);*/
     let d = {
@@ -421,7 +421,7 @@ class Canvas {
         break;
       }
     }
-    
+
     return this.w - (i * 10);
   }
 
@@ -438,14 +438,14 @@ class Canvas {
     let x = _this.width - drawWidth;
     let y = (_this.height - drawHeight) / 2;
     pxctx.drawImage(uimg, x, y, drawWidth, drawHeight);
-    var i,j;
-    for (i=0; i<_this.width; i++) {
-      for (j=0; j<_this.height; j++) {
+    var i, j;
+    for (i = 0; i < _this.width; i++) {
+      for (j = 0; j < _this.height; j++) {
         var ctr = 0;
-        var avg = [0,0,0,0];
+        var avg = [0, 0, 0, 0];
         var pix = pxctx.getImageData(i, j, 1, 1).data;
         var color = 0;
-        if ((pix[0]+pix[1]+pix[2]) > (128*3) && pix[3] > 0) {
+        if ((pix[0] + pix[1] + pix[2]) > (128 * 3) && pix[3] > 0) {
           color = 1;
         }
         imageSteps.push(color);
@@ -459,9 +459,9 @@ class Canvas {
   getPreviewCanvas(uimg) {
     let _this = this;
     let x = Number($('#image-x').val()),
-        y = Number($('#image-y').val()),
-        width = Number($('#image-width').val()),
-        height = Number($('#image-height').val());
+      y = Number($('#image-y').val()),
+      width = Number($('#image-width').val()),
+      height = Number($('#image-height').val());
     var pxc = document.createElement("canvas");
     pxc.width = _this.width;
     pxc.height = _this.height;
@@ -481,12 +481,12 @@ class Canvas {
         if (_this.reserved[xr][yr]) {
           prvCtx.fillStyle = 'rgb(128,128,128)';
         } else if ((pix[0] + pix[1] + pix[2]) < (128 * 3)
-                   && pix[3] > 0) {
+          && pix[3] > 0) {
           prvCtx.fillStyle = 'rgb(0,0,0)';
         } else {
           prvCtx.fillStyle = 'rgb(255,255,255)';
         }
-        
+
         prvCtx.fillRect(xr, yr, 1, 1);
       }
     }
@@ -498,10 +498,10 @@ class Canvas {
     let imageSteps = [];
     var reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = function() {
+    reader.onload = function () {
       var uimg = new Image();
       uimg.src = reader.result;
-      uimg.onload = function() {
+      uimg.onload = function () {
         let uploadPopup = new Popup('#upload-popup');
         let coords = _this.getStandardCoordinates(uimg);
         $('#image-x').val(coords[0]);
@@ -514,8 +514,8 @@ class Canvas {
           let newWidth = Number($("#image-width").val());
           let newHeight = Number($("#image-height").val());
           //Handles aspect ratio
-          if ($("#image-keep-aspect").is(":checked")){
-            if (newWidth != previousWidth){
+          if ($("#image-keep-aspect").is(":checked")) {
+            if (newWidth != previousWidth) {
               $("#image-height").val(Math.round(newHeight * (newWidth / previousWidth)));
             } else if (newHeight != previousHeight) {
               $("#image-width").val(Math.round(newWidth * (newHeight / previousHeight)));
@@ -546,9 +546,9 @@ class Canvas {
 
         let handleOk = () => {
           let x = Number($('#image-x').val()),
-              y = Number($('#image-y').val()),
-              width = Number($('#image-width').val()),
-              height = Number($('#image-height').val());
+            y = Number($('#image-y').val()),
+            width = Number($('#image-width').val()),
+            height = Number($('#image-height').val());
           let previewCanvas = _this.getPreviewCanvas(uimg);
           let pxctx = previewCanvas.getContext("2d");
           let imageSteps = [];
@@ -563,7 +563,7 @@ class Canvas {
               var ctr = 0;
               var pix = pxctx.getImageData(xr, yr, 1, 1).data;
               var color = 0;
-              if ((pix[0]+pix[1]+pix[2]) > (128*3) && pix[3] > 0) {
+              if ((pix[0] + pix[1] + pix[2]) > (128 * 3) && pix[3] > 0) {
                 color = 1;
               }
               imageSteps.push([xr, yr, color]);
@@ -590,7 +590,7 @@ class Canvas {
     let y = (_this.height - drawHeight) / 2;
     return [x, y, drawWidth, drawHeight].map(Math.round);
   }
-  
+
   addImage() {
     var _this = this;
     var fp = document.createElement("input");
@@ -618,20 +618,20 @@ class Frames {
     document.querySelector("#frames").style.display = "block";
     document.querySelector("#frames").style.transform = "translate(-50%,-50%) scale(1,1)";
     document.querySelector("#frames").focus();
-    document.querySelector("#frames #gallery").innerHTML="";
+    document.querySelector("#frames #gallery").innerHTML = "";
     for (var frame of board.frames) document.querySelector("#frames #gallery").appendChild(frame[0]);
-    document.querySelectorAll("#frames #gallery img").forEach((x,i) => {
+    document.querySelectorAll("#frames #gallery img").forEach((x, i) => {
       x.onclick = (e) => {
-    	board.loadFrame(i);
-    	Frames.close();
+        board.loadFrame(i);
+        Frames.close();
       };
       x.oncontextmenu = (e) => {
-    	e.preventDefault();
-    	var del_confirmation = confirm("Delete?");
-    	if (del_confirmation) {
-    	  board.deleteFrame(i);
-    	  Frames.open();
-    	}
+        e.preventDefault();
+        var del_confirmation = confirm("Delete?");
+        if (del_confirmation) {
+          board.deleteFrame(i);
+          Frames.open();
+        }
       };
     });
   }
@@ -640,8 +640,8 @@ class Frames {
   }
 }
 
-$(document).ready(function() {
-  $("#close").click(function () { 
+$(document).ready(function () {
+  $("#close").click(function () {
     $('#close').attr("disabled", true);
 
     if (window.board) {
@@ -666,14 +666,15 @@ $(document).ready(function() {
     document.querySelector(".menu").style.display = document.querySelector(".menu").style.display != "block" ? "block" : "none";
   });
 
-  $("#create-qr").click(function() {
+  $("#create-qr").click(function () {
     $("#create-qr").prop("disabled", true);
     let csrf_token = $(".create-buttons").find("[name='csrfmiddlewaretoken']").val();
     let url = $("#to-url").val();
     let design = window.board.data;
     let postData = { csrfmiddlewaretoken: csrf_token, qrurl: url, qrdesign: JSON.stringify(design) };
-    
-    $.post("/create_qr_arr/", postData, function(data) {
+
+    $.post("/create_qr_arr/", postData, function (data) {
+      console.log(data)
       if (data.success) {
         window.location.href = data.qr_page;
         setTimeout(() => $("#create-qr").prop("disabled", false), 1000);
@@ -697,7 +698,7 @@ $(document).ready(function() {
   window.onbeforeunload = function () {
     board.saveInLocal();
     return;
-  };	
+  };
 
   var msg;
   window.addEventListener('beforeinstallprompt', (e) => {
@@ -706,7 +707,7 @@ $(document).ready(function() {
   });
 
   let canvasData = localStorage.getItem('pc-canvas-data');
-  if(canvasData){
+  if (canvasData) {
     data = JSON.parse(canvasData);
     window.colors = data.colors;
     window.board = new Canvas(data.width, data.height);

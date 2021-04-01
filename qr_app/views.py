@@ -55,13 +55,14 @@ def add_qr_redirect(qr, url):
     index = qr.data.index(b'/R/')
     ident = qr.data[index+3:-3]
     from_identifier = ident.decode('UTF-8')
-    pre_existing = RedirectItem.objects.filter(
-        qr_data_utf8=qr.data.decode('UTF-8'))
-    if pre_existing.count() > 0:
-        return False
+    # pre_existing = RedirectItem.objects.filter(
+    #     qr_data_utf8=qr.data.decode('UTF-8'))
+    # if pre_existing.count() > 0:
+    #     return False
 
     qr_secret = secrets.token_hex(10)
-
+    print("qr_secret")
+    print(qr_secret)
     r = RedirectItem.objects.create(
         qr_data_utf8=qr.data.decode('UTF-8'),
         from_identifier=from_identifier, to_url=url,
@@ -72,24 +73,24 @@ def add_qr_redirect(qr, url):
     return qr_secret
 
 
-# This the main function where the web request goes to
+# This creates the QR code from the web request
 def create_qr_from_array(request):
     if request.method == 'POST':
         url = request.POST['qrurl']
 
-        try:
-            URLValidator()(url)
-        except ValidationError:
-            return JsonResponse({
-                "success": False,
-                "error": "Specify a correct URL. Make sure that your\
-                URL starts with 'https://' or 'http://'.",
-                })
+        # try:
+        #     URLValidator()(url)
+        # except ValidationError:
+        #     return JsonResponse({
+        #         "success": False,
+        #         "error": "Specify a correct URL. Make sure that your\
+        #         URL starts with 'https://' or 'http://'.",
+        #         })
 
         design = qrmap.QrMap.from_array(json.loads(request.POST['qrdesign']))
-        qr = qrmap.create_qr_from_map(
-            design, 'HTTPS://MY-QR.ART/R', 'alphanumeric', 'L')
-
+        qr_url = qrmap.create_qr_url_from_map(design, 'HTTPS://ABC.XYZ/R', 'alphanumeric', 'L')
+        print(qr_url)
+        qr = qrmap.create_qr_from_map(design, 'HTTPS://ABC.XYZ/R', 'alphanumeric', 'L')
         qr_secret = add_qr_redirect(qr, url)
         if qr_secret == False:
             return JsonResponse({
@@ -101,6 +102,7 @@ def create_qr_from_array(request):
 
         return JsonResponse({
             "success": True,
+            "qr_url": qr_url,
             "qr_page": reverse('get_your_qr_page', args=[qr_secret]),
         })
     else:
@@ -112,7 +114,7 @@ def get_your_qr_page(request, qr_secret):
     if ri is not None:
         return render(request, 'qr_app/your-qr-page.html', context={
             'qr_image': reverse('get_qr_from_secret', args=[qr_secret]),
-            'qr_url': ri.to_url,
+            'qr_url': ri.qr_data_utf8,
         })
     else:
         return HttpResponseNotFound('<h1>QR code not found</h1>')

@@ -652,7 +652,9 @@ $(document).ready(function () {
     let csrf_token = $("#popup").find("[name='csrfmiddlewaretoken']").val();
     let postData = { csrfmiddlewaretoken: csrf_token, version: version };
 
-    $.post("/editor/get_qr_template", postData, function (data) {
+    $.get(`http://127.0.0.1:3000/api/templates/${version}`, function (data) {
+      // $.post("/editor/get_qr_template", postData, function (data) {
+      window.salt = data.salt
       window.board = new Canvas(data.width, data.height);
       window.board.setQrMap(data.map);
       window.board.setcolor([0, 0, 0, 255]);
@@ -671,9 +673,10 @@ $(document).ready(function () {
     let csrf_token = $(".create-buttons").find("[name='csrfmiddlewaretoken']").val();
     let url = $("#to-url").val();
     let design = window.board.data;
-    let postData = { csrfmiddlewaretoken: csrf_token, qrurl: url, qrdesign: JSON.stringify(design) };
-
-    $.post("/create_qr_arr/", postData, function (data) {
+    let postData = { csrfmiddlewaretoken: csrf_token, qrurl: url, qrdesign: JSON.stringify(design), salt: window.salt };
+    console.log({ postData })
+    // $.post("/create_qr_arr/", postData, function (data) {
+    $.post(`http://127.0.0.1:3000/api/create_qr_arr`, postData, function (data) {
       console.log(data)
       if (data.success) {
         window.location.href = data.qr_page;

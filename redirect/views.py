@@ -29,6 +29,7 @@ def redirect_action(request):
     path = path[:-3]
 
     from_identifier = to_from_identifier(path)
+    print('from_identifier',from_identifier)
     matches = RedirectItem.objects.filter(from_identifier=from_identifier)
     if matches.count() > 0:
         m = matches.first()
